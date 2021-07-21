@@ -1,0 +1,41 @@
+<div class="menu-drawer-inner">
+  <ul class="navigation-menu">
+    {% for link in linklists.main-menu.links %}
+    <li>
+      {% assign child_list_handle = link.title | handleize %} {% if
+      linklists[child_list_handle].links != blank %}
+      <a href="{{ link.url }}">{{ link.title }}</a>
+      <div class="sub-menu">
+        {% for childlink in linklists[child_list_handle].links %}
+        <a href="{{ childlink.url }}" class="sub-link">{{
+          childlink.title | escape
+        }}</a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <a href="{{ link.url }}">{{ link.title }}</a>
+    </li>
+    {% endif %} {% endfor %}
+  </ul>
+
+  <div class="footer-menu">
+    <ul class="secondary-menu">
+      {% for link in linklists.footer.links %}
+      <li>
+        {% assign child_list_handle = link.title | handleize %} {% if
+        linklists[child_list_handle].links != blank %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+        <div class="sub-menu">
+          {% for childlink in linklists[child_list_handle].links %}
+          <a href="{{ childlink.url }}" class="sub-link">{{
+            childlink.title | escape
+          }}</a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      </li>
+      {% endif %} {% endfor %}
+    </ul>
+  </div>
+</div>

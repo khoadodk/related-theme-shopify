@@ -1,0 +1,89 @@
+<form id="add-to-cart-form">
+  <template v-for="(option, i) in form.options" :key="i">
+    <div>{% render "product-option-row" %}</div>
+  </template>
+
+  <button
+    @click="addToCart"
+    type="submit"
+    name="add"
+    class="add-to-cart-button"
+  >
+    Add to cart
+  </button>
+</form>
+
+<script>
+  if (document.querySelector("#add-to-cart-form")) {
+    const productForm = Vue.createApp({
+      delimiters: ["${", "}"],
+      data() {
+        return {
+          open: false,
+          variant: "",
+          selected: [],
+          form: {
+            selections: "",
+            options: "",
+          },
+        };
+      },
+      // Get the product and pass it to the state above
+      created() {
+        axios.get("/products/{{product.handle}}.js").then((result) => {
+          console.log("RESULT:", result);
+          this.form.options = result.data.options.map((item) => ({
+            ...item,
+            visible: false,
+          }));
+          this.variants = result.data.variants;
+          result.data.options.map((item) => this.selected.push(item.values[0]));
+          this.form.selections = [
+            this.selected[0] ? this.selected[0] : null,
+            this.selected[1] ? this.selected[1] : null,
+            this.selected[2] ? this.selected[2] : null,
+          ];
+          console.log(
+            "SELECTED: ",
+            this.selected,
+            "FORM: ",
+            this.form.selections
+          );
+        });
+      },
+      methods: {
+        // Pass data to the cart
+        addToCart(event) {
+          event.preventDefault();
+
+          let selectedVariant;
+
+          this.variants.forEach((variant, i) => {
+            if (
+              variant.option1 === this.form.selections[0] &&
+              variant.option2 === this.form.selections[1] &&
+              variant.option3 === this.form.selections[2]
+            ) {
+              selectedVariant = variant;
+            }
+          });
+          console.log("VARIANTS: ", this.variants);
+
+          let data = {
+            id: selectedVariant.id,
+            quantity: 1,
+          };
+
+          axios
+            .post("/cart/add.js", data)
+            .then((response) => {
+              // refresh the cart
+              store.getCart();
+            })
+            .then(() => toggleMiniCart.openCart())
+            .catch((error) => console.log(error));
+        },
+      },
+    }).mount("#add-to-cart-form");
+  }
+</script>

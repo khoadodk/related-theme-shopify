@@ -1,0 +1,116 @@
+<footer class="footer">
+  <div class="footer-inner flex">
+    <div class="footer-title ">
+      {{section.settings.title}}
+    </div>
+    <div class="footer-menu">
+      <ul class="secondary-menu">
+        {% for link in linklists.footer.links %}
+        <li>
+          {% assign child_list_handle = link.title | handleize %} {% if
+          linklists[child_list_handle].links != blank %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+          <div class="sub-menu">
+            {% for childlink in linklists[child_list_handle].links %}
+            <a href="{{ childlink.url }}" class="sub-link">{{
+              childlink.title | escape
+            }}</a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+    <div class="footer-menu">
+      <ul class="social-links flex space-between">
+        {% for block in section.blocks %}
+          {% if block.settings.social_facebook_link != blank %}
+            <li>
+                <a href={{block.settings.social_facebook_link}}>
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+          {% endif %}
+          {% if block.settings.social_instagram_link != blank %}
+            <li>
+                <a href={{block.settings.social_instagram_link}}>
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+                </a>
+            </li>
+          {% endif %}
+          {% if block.settings.social_youtube_link != blank %}
+            <li>
+                <a href={{block.settings.social_youtube_link}}>
+                <i class="fa fa-youtube" aria-hidden="true"></i>
+                </a>
+            </li>
+          {% endif %}
+          {% if block.settings.social_twitter_link != blank %}
+            <li>
+                <a href={{block.settings.social_twitter_link}}>
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+          {% endif %}
+          {% if block.settings.social_pinterest_link != blank %}
+            <li>
+                <a href={{block.settings.social_pinterest_link}}>
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+                </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+    {
+        "name": "Footer",
+        "max_blocks": 1,
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Footer Deccription",
+                "default" :"Footer Description"
+            }
+        ],
+        "blocks": [
+            {
+                "type":"social_link",
+                "name": "Social Links",
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "social_facebook_link",
+                        "label": "Facebook url"
+                    },
+                    {
+                        "type": "text",
+                        "id": "social_twitter_link",
+                        "label": "Twitter url"
+                    },
+                    {
+                        "type": "text",
+                        "id": "social_instagram_link",
+                        "label": "Instagram url"
+                    },
+                    {
+                        "type": "text",
+                        "id": "social_youtube_link",
+                        "label": "Youtube url"
+                    },
+                    {
+                        "type": "text",
+                        "id": "social_pinterest_link",
+                        "label": "Pinterest url"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}
